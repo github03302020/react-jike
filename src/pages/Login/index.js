@@ -1,16 +1,23 @@
-import { Form, Button, Input,Card } from "antd"
+import { Form, Button, Input, Card, message, } from "antd"
 import logo from "@/assets/logo.png"
 import "./index.scss"
 import { useDispatch } from "react-redux"
 import { fetchToken } from "@/store/modules/user"
+import { useNavigate } from "react-router-dom"
 const Login = ()=>{
   const dispatch = useDispatch()
-  const onFinish = (value)=>{
+  const navigate = useNavigate()
+  const [messageApi, contextHolder] = message.useMessage();
+  const onFinish = async (value)=>{
     console.log(value)
-    dispatch(fetchToken(value))
+    await dispatch(fetchToken(value))
+    messageApi.success('登录成功！');
+    setTimeout(() => { navigate('/') },500)
+    // navigate('/')
   }
   return (
     <div className="login">
+      {contextHolder}
       <Card>
         <img src={logo} alt="logo"></img>
        <Form autoComplete="off" onFinish={onFinish} validateTrigger="onBlur">
