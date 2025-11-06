@@ -1,9 +1,13 @@
 import { Form, Button, Input,Card } from "antd"
 import logo from "@/assets/logo.png"
 import "./index.scss"
+import { useDispatch } from "react-redux"
+import { fetchToken } from "@/store/modules/user"
 const Login = ()=>{
+  const dispatch = useDispatch()
   const onFinish = (value)=>{
     console.log(value)
+    dispatch(fetchToken(value))
   }
   return (
     <div className="login">
