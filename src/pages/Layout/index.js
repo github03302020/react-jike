@@ -2,6 +2,7 @@ import { Layout, Menu } from 'antd';
 import { HomeOutlined, RadiusUprightOutlined, EditOutlined, PoweroffOutlined } from '@ant-design/icons';
 import headpic from '@/assets/hd.webp'
 import './index.scss'
+import { Outlet } from 'react-router-dom';
 
 const { Header, Sider, Content} = Layout;
 
@@ -31,7 +32,10 @@ const GeekLayout = ()=>{
         <Sider width="25%">
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} items={items} />
         </Sider>
-        <Content>Content</Content>
+        {/* <Content>Content</Content> */}
+        <Layout style={{padding: '20px'}}>
+          <Outlet/>
+        </Layout>
       </Layout>
     </Layout >
   )
