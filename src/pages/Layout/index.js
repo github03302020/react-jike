@@ -1,15 +1,40 @@
-import { useEffect } from "react"
-import { request } from "@/utils"
+import { Layout, Menu } from 'antd';
+import { HomeOutlined, RadiusUprightOutlined, EditOutlined, PoweroffOutlined } from '@ant-design/icons';
+import headpic from '@/assets/hd.webp'
+import './index.scss'
 
-const Layout = ()=>{
-  useEffect(()=>{
-   request.get('/authorizations')
-  },[])
+const { Header, Sider, Content} = Layout;
+
+const items = [
+  {key: 'home',
+   label: '首页',
+   icon: <HomeOutlined/>
+  },
+  {key: 'manageArticle',
+   label: '管理文章',
+   icon: <RadiusUprightOutlined />
+  },
+  {key: 'createArticle',
+   label: '创建文章',
+   icon: <EditOutlined />
+  }
+ ]
+
+const GeekLayout = ()=>{
   return (
-    <div>
-      this is Layout
-    </div>
+    < Layout  className='layout'>
+      <Header className='header'>
+        <div className="headpic"><img src={headpic} alt='header'/></div>    
+        <div className='right'> <span>user.name</span>  <span><PoweroffOutlined />退出 </span> </div>    
+      </Header>
+      <Layout>
+        <Sider width="25%">
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} items={items} />
+        </Sider>
+        <Content>Content</Content>
+      </Layout>
+    </Layout >
   )
 }
 
-export default Layout
+export default GeekLayout
