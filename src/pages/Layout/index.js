@@ -2,7 +2,7 @@ import { Layout, Menu } from 'antd';
 import { HomeOutlined, RadiusUprightOutlined, EditOutlined, PoweroffOutlined } from '@ant-design/icons';
 import headpic from '@/assets/hd.webp'
 import './index.scss'
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation} from 'react-router-dom';
 
 const { Header, Sider, Content} = Layout;
 
@@ -26,6 +26,7 @@ const GeekLayout = ()=>{
   const onMenuClick = (route)=>{
     navigate(route.key)
   }
+  const location = useLocation()
   return (
     < Layout  className='layout'>
       <Header className='header'>
@@ -34,7 +35,11 @@ const GeekLayout = ()=>{
       </Header>
       <Layout>
         <Sider width="25%">
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} items={items} onClick={onMenuClick}/>
+          <Menu theme="dark" 
+          mode="inline" 
+          selectedKeys={ location.pathname }
+          items={items} 
+          onClick={onMenuClick}/>
         </Sider>
         <Content style={{ padding: '20px' }}>
           <Outlet />
