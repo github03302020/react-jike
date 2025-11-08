@@ -3,6 +3,9 @@ import { HomeOutlined, RadiusUprightOutlined, EditOutlined, PoweroffOutlined } f
 import headpic from '@/assets/hd.webp'
 import './index.scss'
 import { Outlet, useNavigate, useLocation} from 'react-router-dom';
+import { useEffect } from 'react';
+import { fetchUserInfo } from '@/store/modules/user';
+import { useDispatch, useSelector } from 'react-redux';
 
 const { Header, Sider, Content} = Layout;
 
@@ -27,11 +30,20 @@ const GeekLayout = ()=>{
     navigate(route.key)
   }
   const location = useLocation()
+
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    dispatch(fetchUserInfo())
+  },[dispatch])
+  const name =useSelector(state=>state.user.userInfo.name)
   return (
     < Layout  className='layout'>
       <Header className='header'>
         <div className="headpic"><img src={headpic} alt='header'/></div>    
-        <div className='right'> <span>user.name</span>  <span><PoweroffOutlined />退出 </span> </div>    
+        <div className='right'> 
+          <span style={{marginRight: '20px'}}>{name}</span>  
+          <span style={{paddingRight: '10px'}}><PoweroffOutlined />退出 </span> 
+        </div>    
       </Header>
       <Layout>
         <Sider width="25%">

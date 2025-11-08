@@ -6,18 +6,22 @@ const userStore = createSlice({
   name: 'user',
   initialState: {
     // token: localStorage.getItem('token_key') || ''
-    token: getToken() || ''
+    token: getToken() || '',
+    userInfo: {}
   },
   reducers:{
     setToken( state, action){
       state.token = action.payload
       // localStorage.setItem('token_key',action.payload)
       _setToken(action.payload)
+    },
+    setUserInfo( state, action){
+      state.userInfo = action.payload
     }
   }
 })
 
-const { setToken } = userStore.actions
+const { setToken, setUserInfo } = userStore.actions
 
 const fetchToken = (loginForm)=>{
   return async (dispatch)=>{
@@ -27,7 +31,14 @@ const fetchToken = (loginForm)=>{
     dispatch(setToken('skdiLoeJ03jLuwhHL0jl3K;#JdKk'))
   }
 }
+
+const fetchUserInfo = ()=>{
+  return async(dispatch)=>{
+    const res = await request.get('/profile')
+    dispatch(setUserInfo(res.data))
+  }
+}
 const userReducer = userStore.reducer
 
-export { setToken, fetchToken}
+export { setToken, fetchToken, fetchUserInfo}
 export default userReducer
