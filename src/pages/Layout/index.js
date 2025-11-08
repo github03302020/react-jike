@@ -2,26 +2,30 @@ import { Layout, Menu } from 'antd';
 import { HomeOutlined, RadiusUprightOutlined, EditOutlined, PoweroffOutlined } from '@ant-design/icons';
 import headpic from '@/assets/hd.webp'
 import './index.scss'
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 const { Header, Sider, Content} = Layout;
 
 const items = [
-  {key: 'home',
+  {key: '/',
    label: '首页',
    icon: <HomeOutlined/>
   },
-  {key: 'manageArticle',
+  {key: '/article',
    label: '管理文章',
    icon: <RadiusUprightOutlined />
   },
-  {key: 'createArticle',
+  {key: '/publish',
    label: '创建文章',
    icon: <EditOutlined />
   }
  ]
 
 const GeekLayout = ()=>{
+  const navigate = useNavigate()
+  const onMenuClick = (route)=>{
+    navigate(route.key)
+  }
   return (
     < Layout  className='layout'>
       <Header className='header'>
@@ -30,12 +34,14 @@ const GeekLayout = ()=>{
       </Header>
       <Layout>
         <Sider width="25%">
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} items={items} />
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['home']} items={items} onClick={onMenuClick}/>
         </Sider>
-        {/* <Content>Content</Content> */}
-        <Layout style={{padding: '20px'}}>
+        <Content style={{ padding: '20px' }}>
+          <Outlet />
+        </Content>
+        {/* <Layout style={{padding: '20px'}}>
           <Outlet/>
-        </Layout>
+        </Layout> */}
       </Layout>
     </Layout >
   )
