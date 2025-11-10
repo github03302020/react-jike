@@ -1,5 +1,8 @@
 import { Card, Breadcrumb, Form, Input, Select, Button } from 'antd'
 import { Link } from 'react-router-dom'
+import ReactQuill from 'react-quill-new'
+import 'react-quill-new/dist/quill.snow.css'
+import './index.scss'
 const Publish = () => {
   return (<div> 
     <Card title={
@@ -16,7 +19,7 @@ const Publish = () => {
     }>
       <Form 
         labelCol={{ span: 4 }}
-        wrapperCol={{ span: 16 }}
+        wrapperCol={{ span: 10 }}
         autoComplete="off"
       >
         <Form.Item
@@ -44,9 +47,14 @@ const Publish = () => {
         <Form.Item
           label="内容"
           name="content"
+          wrapperCol={{ span: 16 }}
           rules={[{ required: true, message: '请输入内容！' }]}
         >
-
+            <ReactQuill 
+              theme="snow"
+              className="publish-quill"
+              placeholder="请输入文章内容"
+            />
         </Form.Item>
         <Form.Item 
           label={null}
