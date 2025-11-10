@@ -1,10 +1,10 @@
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Popconfirm } from 'antd';
 import { HomeOutlined, RadiusUprightOutlined, EditOutlined, PoweroffOutlined } from '@ant-design/icons';
 import headpic from '@/assets/hd.webp'
 import './index.scss'
 import { Outlet, useNavigate, useLocation} from 'react-router-dom';
 import { useEffect } from 'react';
-import { fetchUserInfo } from '@/store/modules/user';
+import { clearUserInfo, fetchUserInfo } from '@/store/modules/user';
 import { useDispatch, useSelector } from 'react-redux';
 
 const { Header, Sider, Content} = Layout;
@@ -36,13 +36,29 @@ const GeekLayout = ()=>{
     dispatch(fetchUserInfo())
   },[dispatch])
   const name =useSelector(state=>state.user.userInfo.name)
+
+  const confirm = ()=>{
+    console.log('确认退出')
+    dispatch(clearUserInfo())
+    navigate('/login')
+  }
   return (
     < Layout  className='layout'>
       <Header className='header'>
         <div className="headpic"><img src={headpic} alt='header'/></div>    
         <div className='right'> 
           <span style={{marginRight: '20px'}}>{name}</span>  
-          <span style={{paddingRight: '10px'}}><PoweroffOutlined />退出 </span> 
+          <span style={{paddingRight: '10px'}}>
+            <Popconfirm
+              title="温馨提示"
+              description="你真的要退出吗?"
+              onConfirm={confirm}
+              okText="确认"
+              cancelText="取消"
+            >
+              <PoweroffOutlined />退出 
+            </Popconfirm>            
+          </span> 
         </div>    
       </Header>
       <Layout>
