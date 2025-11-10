@@ -30,9 +30,9 @@ const BarChart = ({title}) => {
   },[title])
 
   return (
-    <>
+    <div style={{display: 'inline-block'}}>
       <div ref={chartRef} style={{width:'500px', height:'400px'}}> </div>
-    </>
+    </div>
   )
 }
 
