@@ -1,5 +1,6 @@
 import axios from "axios";
-import { getToken } from "./token";
+import { getToken, removeToken } from "./token";
+import router from "@/router";
 
 const instance = axios.create({
   baseURL: 'http://localhost:3004/',
@@ -27,6 +28,12 @@ instance.interceptors.response.use(function (response) {
 }, function (error) {
   // 超出 2xx 范围的状态码都会触发该函数。
   // 对响应错误做点什么
+  console.dir(error)
+  if(error.status.code===401){
+    removeToken()
+    router.navigate('/login')
+    window.location.reload()
+  }
   return Promise.reject(error);
 });
 
