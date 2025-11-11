@@ -6,3 +6,11 @@ export function getChannelsAPI(){
     url: "/channels"
   })
 }
+
+export function createArticleAPI(data){
+  return request({
+    method: "POST",
+    url: "/articles",
+    data
+  })
+}

@@ -9,16 +9,58 @@
   "profile": {
     "name": "Sally"
   },
-  "channels":[
-    { "id": 1, "name": "html"},
-    { "id": 2, "name": "开发者资讯"},
-    { "id": 3, "name": "c++"},
-    { "id": 4, "name": "css"},
-    { "id": 5, "name": "数据库"},
-    { "id": 6, "name": "区块链"},
-    { "id": 7, "name": "人工智能"},
-    { "id": 8, "name": "大数据"},
-    { "id": 9, "name": "java"},
-    { "id": 10, "name": "前端框架"}
+  "channels": [
+    {
+      "id": 1,
+      "name": "html"
+    },
+    {
+      "id": 2,
+      "name": "开发者资讯"
+    },
+    {
+      "id": 3,
+      "name": "c++"
+    },
+    {
+      "id": 4,
+      "name": "css"
+    },
+    {
+      "id": 5,
+      "name": "数据库"
+    },
+    {
+      "id": 6,
+      "name": "区块链"
+    },
+    {
+      "id": 7,
+      "name": "人工智能"
+    },
+    {
+      "id": 8,
+      "name": "大数据"
+    },
+    {
+      "id": 9,
+      "name": "java"
+    },
+    {
+      "id": 10,
+      "name": "前端框架"
+    }
+  ],
+  "articles": [
+    {
+      "id": "d17c",
+      "title": "新的文章",
+      "content": "<p>这是文章的内容</p>",
+      "cover": {
+        "type": 0,
+        "images": []
+      },
+      "channel_id": 4
+    }
   ]
 }

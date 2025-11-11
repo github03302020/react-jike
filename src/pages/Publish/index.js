@@ -4,7 +4,7 @@ import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 import './index.scss'
 import { useEffect, useState } from 'react'
-import { getChannelsAPI } from '@/apis/article'
+import { createArticleAPI, getChannelsAPI } from '@/apis/article'
 
 const { Option } =Select
 const Publish = () => {
@@ -22,6 +22,17 @@ const Publish = () => {
 
   const onFinish = (value)=>{
     console.log(value)
+    const {title, channel, content } = value
+    const data = {
+      title,
+      content,
+      cover:{
+        type:0,
+        images:[]
+      },
+      channel_id: channel
+    }
+    createArticleAPI(data)
   }
   return (<div> 
     <Card title={
