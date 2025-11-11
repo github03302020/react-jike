@@ -3,7 +3,26 @@ import { Link } from 'react-router-dom'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 import './index.scss'
+import { useEffect, useState } from 'react'
+import { getChannelsAPI } from '@/apis/article'
+
+const { Option } =Select
 const Publish = () => {
+  const [channels, setChannels] = useState([])
+  useEffect(()=>{
+    const getChannels = async()=>{
+      const res = await getChannelsAPI()
+      setChannels(res.data)
+    }
+    getChannels()
+  },[])
+  console.log(channels)
+  // const options = channels.map(item => ({ label: item.name, value: item.id }))
+  // console.log(options)
+
+  const onFinish = (value)=>{
+    console.log(value)
+  }
   return (<div> 
     <Card title={
       <Breadcrumb
@@ -21,6 +40,7 @@ const Publish = () => {
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 10 }}
         autoComplete="off"
+        onFinish={onFinish}
       >
         <Form.Item
           label="标题"
@@ -37,13 +57,17 @@ const Publish = () => {
           <Select
             allowClear
             placeholder="请选择文章频道"
-            options={[
-              { label: 'male', value: 'male' },
-              { label: 'female', value: 'female' },
-              { label: 'other', value: 'other' },
-            ]}
-          />
+            // options ={options} 
+            // options={[
+            //   { label: 'male', value: 'male' },
+            //   { label: 'female', value: 'female' },
+            //   { label: 'other', value: 'other' },
+            // ]}
+          >
+           {channels.map(item=><Option key={item.id} value={item.id}>{item.name}</Option>)}
+          </Select>
         </Form.Item>
+
         <Form.Item
           label="内容"
           name="content"
