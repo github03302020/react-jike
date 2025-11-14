@@ -39,6 +39,12 @@ const Article = ()=>{
       // operations: <div><EditOutlined className='icons blue'/><DeleteOutlined className='icons red'/></div>
     },
   ];
+
+  const status = {
+    1: <Tag color='red'>草稿</Tag>,
+    2: <Tag color='yellow'>待审核</Tag>,
+    3: <Tag color='green'>审核通过</Tag>,
+  }
   
   const columns = [
     {
@@ -60,7 +66,7 @@ const Article = ()=>{
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      render: status => <Tag color="green">{status}</Tag>
+      render: data=> status[data]
     },
     {
       title: '发布时间',
