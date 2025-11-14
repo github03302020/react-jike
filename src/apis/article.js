@@ -14,3 +14,11 @@ export function createArticleAPI(data){
     data
   })
 }
+
+export function getArticleListAPI(params){
+  return request({
+    method: "GET",
+    url: '/articles',
+    params
+  })
+}

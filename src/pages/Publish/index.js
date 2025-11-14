@@ -7,6 +7,7 @@ import './index.scss'
 import {  useState } from 'react'
 import { createArticleAPI } from '@/apis/article'
 import { useChannel }  from '@/hooks/useChannel'
+import dayjs from 'dayjs'
 
 // const { Option } =Select
 const Publish = () => {
@@ -26,7 +27,12 @@ const Publish = () => {
         type,
         images: imageList.map(item => item.thumbUrl),
         },
-      channel_id: channel
+      channel_id: channel,
+      pubDate: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      read_count:0,
+      like_count:0,
+      comment_count:0,
+      status:1
     }
     createArticleAPI(data)
   }

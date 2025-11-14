@@ -1,9 +1,12 @@
-import { Card, Breadcrumb, Form, Radio, Select, DatePicker, Table, Button } from 'antd'
+import { Card, Breadcrumb, Form, Radio, Select, DatePicker, Table, Button, Tag, Space } from 'antd'
 import { Link } from 'react-router-dom'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import './index.scss'
 import { useChannel } from '@/hooks/useChannel'
+import defaultImg from '@/assets/default.webp'
+import { useEffect, useState } from 'react'
+import { getArticleListAPI } from '@/apis/article'
 
 const { RangePicker } = DatePicker;
 
@@ -11,19 +14,29 @@ const { RangePicker } = DatePicker;
 const Article = ()=>{
   const { channels } = useChannel()
   const options = channels.map(item => ({ label: item.name, value: item.id })) 
+  const [ articleList, setArticleList] = useState([])
+  const [ totalCount, setTotalCount] = useState(0)
+  useEffect(()=>{
+    const getArticleList = async()=>{
+      const res = await getArticleListAPI()
+      setArticleList(res.data)
+      setTotalCount(res.data.length)
+    }
+    getArticleList()
+  },[])
   const dataSource = [
     {
       id: '1',
-      cover:
-       <img src='https://img1.baidu.com/it/u=4111161705,1085912078&fm=253&fmt=auto&app=138&f=JPEG?w=805&h=800' alt='pic' className='img'/>
-       ,       
+      cover:{
+        images:[]
+      },    
       title: '关于前端未来',
       status: '草稿',
       pubdate: '2025-10-31',
       read_count: 3,
       comment_count: 1,
       like_count: 2,
-      operations: <div><EditOutlined className='icons blue'/><DeleteOutlined className='icons red'/></div>
+      // operations: <div><EditOutlined className='icons blue'/><DeleteOutlined className='icons red'/></div>
     },
   ];
   
@@ -32,6 +45,11 @@ const Article = ()=>{
       title: '封面',
       dataIndex: 'cover',
       key: 'cover',
+      render: cover=>{
+        return (
+          <img src={cover.images[0] || defaultImg} width={80} height={60} alt='pic'/>
+        )
+      }
     },
     {
       title: '标题',
@@ -42,11 +60,12 @@ const Article = ()=>{
       title: '状态',
       dataIndex: 'status',
       key: 'status',
+      render: status => <Tag color="green">{status}</Tag>
     },
     {
       title: '发布时间',
-      dataIndex: 'pubdate',
-      key: 'pubdate',
+      dataIndex: 'pubDate',
+      key: 'pubDate',
     },
     {
       title: '阅读数',
@@ -65,8 +84,15 @@ const Article = ()=>{
     },
     {
       title: '操作',
-      dataIndex: 'operations',
       key: 'operations',
+      render: ()=>{
+        return (
+          <Space>
+            <Button color="primary" shape="circle" icon={<EditOutlined />} variant="solid"/>
+            <Button color="danger" shape="circle" icon={<DeleteOutlined />} variant="solid" />  
+          </Space>
+        )
+      }
     },
   ];
   return (<div> 
@@ -136,8 +162,8 @@ const Article = ()=>{
       </Form>
     </Card>
 
-    <Card title="根据筛选条件共查到5条结果">
-      <Table dataSource={dataSource} columns={columns} />
+    <Card title={`根据筛选条件共查到${totalCount}条结果`}>
+      <Table dataSource={articleList} columns={columns} />
     </Card>
   </div>)
 }
