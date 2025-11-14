@@ -4,23 +4,14 @@ import { Link } from 'react-router-dom'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 import './index.scss'
-import { useEffect, useState } from 'react'
-import { createArticleAPI, getChannelsAPI } from '@/apis/article'
-import { type } from '@testing-library/user-event/dist/type'
+import {  useState } from 'react'
+import { createArticleAPI } from '@/apis/article'
+import { useChannel }  from '@/hooks/useChannel'
 
 // const { Option } =Select
 const Publish = () => {
-  const [channels, setChannels] = useState([])
-  useEffect(()=>{
-    const getChannels = async()=>{
-      const res = await getChannelsAPI()
-      setChannels(res.data)
-    }
-    getChannels()
-  },[])
-  console.log(channels)
-  const options = channels.map(item => ({ label: item.name, value: item.id }))
-  console.log(options)
+  const { channels } = useChannel()
+  const options = channels.map(item => ({ label: item.name, value: item.id })) 
   
   const [messageApi, contextHolder] = message.useMessage()
 

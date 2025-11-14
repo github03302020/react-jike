@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import './index.scss'
+import { useChannel } from '@/hooks/useChannel'
 
 const { RangePicker } = DatePicker;
 
 
 const Article = ()=>{
+  const { channels } = useChannel()
+  const options = channels.map(item => ({ label: item.name, value: item.id })) 
   const dataSource = [
     {
       id: '1',
@@ -111,7 +114,7 @@ const Article = ()=>{
           <Select
             allowClear
             placeholder="请选择频道"
-            // options={options}
+            options={options}
           >
             {/* {channels.map(item=><Option key={item.id} value={item.id}>{item.name}</Option>)} */}
           </Select>
