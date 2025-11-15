@@ -1,5 +1,5 @@
 import { Card, Breadcrumb, Form, Radio, Select, DatePicker, Table, Button, Tag, Space, Popconfirm } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import './index.scss'
@@ -16,6 +16,8 @@ const Article = ()=>{
   const options = channels.map(item => ({ label: item.name, value: item.id })) 
   const [ articleList, setArticleList] = useState([])
   const [ totalCount, setTotalCount] = useState(0)
+
+  const navigate = useNavigate()
 
   const [reqData, setReqData]=useState({
     status: '',
@@ -126,7 +128,7 @@ const Article = ()=>{
       render: (data)=>{
         return (
           <Space>
-            <Button color="primary" shape="circle" icon={<EditOutlined />} variant="solid"/>
+            <Button color="primary" shape="circle" icon={<EditOutlined /> } variant="solid" onClick={()=>navigate(`/publish?id=${data.id}`)} />
             <Popconfirm
               title="确认"
               description="你确定要删除码?"
