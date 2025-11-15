@@ -18,7 +18,14 @@ export function createArticleAPI(data){
 export function getArticleListAPI(params){
   return request({
     method: "GET",
-    url: '/articles',
+    url: "/articles",
     params
+  })
+}
+
+export function deleteArticleAPI(id){
+  return request({
+    method: "DELETE",
+    url: `/articles/${id}`
   })
 }

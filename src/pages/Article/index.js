@@ -1,4 +1,4 @@
-import { Card, Breadcrumb, Form, Radio, Select, DatePicker, Table, Button, Tag, Space } from 'antd'
+import { Card, Breadcrumb, Form, Radio, Select, DatePicker, Table, Button, Tag, Space, Popconfirm } from 'antd'
 import { Link } from 'react-router-dom'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
@@ -6,7 +6,7 @@ import './index.scss'
 import { useChannel } from '@/hooks/useChannel'
 import defaultImg from '@/assets/default.webp'
 import { useEffect, useState } from 'react'
-import { getArticleListAPI } from '@/apis/article'
+import { deleteArticleAPI, getArticleListAPI } from '@/apis/article'
 
 const { RangePicker } = DatePicker;
 
@@ -72,6 +72,12 @@ const Article = ()=>{
     3: <Tag color='green'>审核通过</Tag>,
   }
   
+  const onConfirm = async(id)=>{
+    await deleteArticleAPI(id)
+    setReqData({
+      ...reqData
+    })
+  }
   const columns = [
     {
       title: '封面',
@@ -117,11 +123,19 @@ const Article = ()=>{
     {
       title: '操作',
       key: 'operations',
-      render: ()=>{
+      render: (data)=>{
         return (
           <Space>
             <Button color="primary" shape="circle" icon={<EditOutlined />} variant="solid"/>
-            <Button color="danger" shape="circle" icon={<DeleteOutlined />} variant="solid" />  
+            <Popconfirm
+              title="确认"
+              description="你确定要删除码?"
+              onConfirm={()=>onConfirm(data.id)}
+              okText="Yes"
+              cancelText="No"
+            >
+            <Button color="danger" shape="circle" icon={<DeleteOutlined />} variant="solid" /> 
+            </Popconfirm> 
           </Space>
         )
       }
