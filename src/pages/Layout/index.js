@@ -43,7 +43,7 @@ const GeekLayout = ()=>{
     navigate('/login')
   }
   return (
-    < Layout  className='layout'>
+    < Layout className='layout'>
       <Header className='header'>
         <div className="headpic"><img src={headpic} alt='header'/></div>    
         <div className='right'> 

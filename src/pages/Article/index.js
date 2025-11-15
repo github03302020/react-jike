@@ -16,29 +16,55 @@ const Article = ()=>{
   const options = channels.map(item => ({ label: item.name, value: item.id })) 
   const [ articleList, setArticleList] = useState([])
   const [ totalCount, setTotalCount] = useState(0)
+
+  const [reqData, setReqData]=useState({
+    status: '',
+    channel_id: '',
+    begin_pubDate:'',
+    end_pubDate:'',
+    page:1,
+    per_page:4
+  })
   useEffect(()=>{
     const getArticleList = async()=>{
-      const res = await getArticleListAPI()
-      setArticleList(res.data)
-      setTotalCount(res.data.length)
+      const res = await getArticleListAPI(reqData)
+      let list = res.data
+      console.log('list',list)
+      console.log('reqData',reqData)
+      if (list.length>0){
+        if (reqData.status){
+          console.log(1)
+          list = list.filter(item=>item.status===+reqData.status)
+          console.log('list1', list)
+        }
+        if (reqData.channel_id){
+          console.log(2)
+          list = list.filter(item=>item.channel_id===+reqData.channel_id)
+        }
+        if (reqData.begin_pubDate && reqData.end_pubDate ){
+          console.log(3)
+          list = list.filter(item => item.pubDate >= reqData.begin_pubDate && item.pubDate <= reqData.end_pubDate)
+        }
+      }
+      // setArticleList(res.data)
+      // setTotalCount(res.data.length)
+      setArticleList(list)
+      setTotalCount(list.length)
     }
     getArticleList()
-  },[])
-  const dataSource = [
-    {
-      id: '1',
-      cover:{
-        images:[]
-      },    
-      title: '关于前端未来',
-      status: '草稿',
-      pubdate: '2025-10-31',
-      read_count: 3,
-      comment_count: 1,
-      like_count: 2,
-      // operations: <div><EditOutlined className='icons blue'/><DeleteOutlined className='icons red'/></div>
-    },
-  ];
+  },[reqData])
+
+  const onFinish = (data)=>{
+    console.log('formData',data)
+    setReqData({
+      ...reqData,
+      status: data.status==='all'?'':data.status,
+      channel_id: data.channel,
+      begin_pubDate: data.date?data.date[0].format('YYYY-MM-DD 00:00:00'):'',
+      end_pubDate: data.date?data.date[1].format('YYYY-MM-DD 23:59:59'):'',
+    })
+  }
+
 
   const status = {
     1: <Tag color='red'>草稿</Tag>,
@@ -110,7 +136,7 @@ const Article = ()=>{
               title: (<Link to='/'>首页</Link>),
             },
             {
-              title: '文章发布',
+              title: '文章管理',
             }
           ]}
         />
@@ -120,8 +146,8 @@ const Article = ()=>{
         // labelCol={{ span: 2 }}
         // wrapperCol={{ span: 10 }}
         autoComplete="off"
-        // onFinish={onFinish}
-        // initialValues={{ type: 0 }}
+        onFinish={onFinish}
+        initialValues={{ status: '', channel_id:'',date:'' }}
       >
         <Form.Item
           label="状态"
@@ -130,8 +156,9 @@ const Article = ()=>{
           <Radio.Group
             options={[
               { value: 'all', label: '全部' },
-              { value: 'draft', label: '草稿' },
-              { value: 'approved', label: '审核通过' },
+              { value: '1', label: '草稿' },
+              { value: '2', label: '待审核' },
+              { value: '3', label: '审核通过' },
             ]}
             // onChange={(e) => setSelectValue(e.target.value)}
           />
