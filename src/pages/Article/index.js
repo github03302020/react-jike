@@ -22,8 +22,8 @@ const Article = ()=>{
     channel_id: '',
     begin_pubDate:'',
     end_pubDate:'',
-    page:1,
-    per_page:4
+    // page:1,
+    // per_page:4
   })
   useEffect(()=>{
     const getArticleList = async()=>{
@@ -196,7 +196,11 @@ const Article = ()=>{
     </Card>
 
     <Card title={`根据筛选条件共查到${totalCount}条结果`}>
-      <Table dataSource={articleList} columns={columns} />
+    <Table dataSource={articleList} columns={columns} pagination={{
+      defaultCurrent: 1,
+      total: totalCount,
+      pageSize: 3
+    }}/>       
     </Card>
   </div>)
 }
