@@ -36,6 +36,7 @@ const Publish = () => {
     comment_count:0,
     status:1
   }
+  console.log(data)
   createArticleAPI(data)
 }
 
@@ -49,17 +50,26 @@ const [selectValue, setSelectValue] = useState(0)
 const [ searchParams] = useSearchParams()
 const [ form ] = useForm()
 const id =searchParams.get('id')
+const [fileList, setFileList] = useState()
+  // const [imageUrl, setImageUrl] = useState()
+
 
 useEffect(()=>{
   if(id){
     const getArticle=async()=>{
       const res = await getArticleByIdAPI(id)
+      const data = res.data
+      const {cover} = data
       form.setFieldsValue({
-        ...res.data,
-        channel: res.data.channel_id,
-        type: res.data.cover.type,
-        cover: res.data.cover.images
+        ...data,
+        channel: data.channel_id,
+        type: cover.type
+        // cover: res.data.cover.images
       })
+      setSelectValue(cover.type)
+      setFileList(cover.images.map(url => { return { url } }))
+      // setImageUrl(res.data.cover.images)
+
     }
     getArticle()
   }
@@ -133,9 +143,14 @@ return (<div>
               // action="http://localhost:3004/upload"
               onChange={handleChange}
               beforeUpload={()=>false}
+              fileList={fileList}
             >
               <div>
+            {/* {imageUrl ? (
+              <img draggable={false} src={imageUrl} alt="pic" style={{ width: '100%' }} />
+            ) : */}
                 <PlusOutlined />
+                {/* } */}
               </div>
             </Upload>
         </Form.Item>}
