@@ -31,8 +31,6 @@ const Article = ()=>{
     const getArticleList = async()=>{
       const res = await getArticleListAPI(reqData)
       let list = res.data
-      console.log('list',list)
-      console.log('reqData',reqData)
       if (list.length>0){
         if (reqData.status){
           console.log(1)
@@ -212,7 +210,10 @@ const Article = ()=>{
     </Card>
 
     <Card title={`根据筛选条件共查到${totalCount}条结果`}>
-    <Table dataSource={articleList} columns={columns} pagination={{
+    <Table 
+      dataSource={articleList} 
+      columns={columns}
+      pagination={{
       defaultCurrent: 1,
       total: totalCount,
       pageSize: 3

@@ -1,50 +1,71 @@
 import { Card, Breadcrumb, Form, Input, Select, Button, Radio, Upload, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 import './index.scss'
-import {  useState } from 'react'
-import { createArticleAPI } from '@/apis/article'
+import {  useEffect, useState } from 'react'
+import { createArticleAPI, getArticleByIdAPI } from '@/apis/article'
 import { useChannel }  from '@/hooks/useChannel'
 import dayjs from 'dayjs'
+import { useForm } from 'antd/es/form/Form'
 
 // const { Option } =Select
 const Publish = () => {
   const { channels } = useChannel()
   const options = channels.map(item => ({ label: item.name, value: item.id })) 
+
   
   const [messageApi, contextHolder] = message.useMessage()
-
+  
   const onFinish = (value)=>{
     console.log(value)
     const {title, channel, content, type } = value
     if (imageList.length !== type) return messageApi.warning('封面类型和图片数量不匹配')
-    const data = {
-      title,
-      content,
-      cover:{
-        type,
-        images: imageList.map(item => item.thumbUrl),
-        },
-      channel_id: channel,
-      pubDate: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-      read_count:0,
-      like_count:0,
-      comment_count:0,
-      status:1
+      const data = {
+    title,
+    content,
+    cover:{
+      type,
+      images: imageList.map(item => item.thumbUrl),
+    },
+    channel_id: channel,
+    pubDate: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    read_count:0,
+    like_count:0,
+    comment_count:0,
+    status:1
+  }
+  createArticleAPI(data)
+}
+
+const [imageList, setImageList]=useState([])
+const handleChange = (value)=>{
+  console.log('正在上传',value)
+  setImageList(value.fileList)
+}
+const [selectValue, setSelectValue] = useState(0)
+
+const [ searchParams] = useSearchParams()
+const [ form ] = useForm()
+const id =searchParams.get('id')
+
+useEffect(()=>{
+  if(id){
+    const getArticle=async()=>{
+      const res = await getArticleByIdAPI(id)
+      form.setFieldsValue({
+        ...res.data,
+        channel: res.data.channel_id,
+        type: res.data.cover.type,
+        cover: res.data.cover.images
+      })
     }
-    createArticleAPI(data)
+    getArticle()
   }
+},[form,id])
 
-  const [imageList, setImageList]=useState([])
-  const handleChange = (value)=>{
-    console.log('正在上传',value)
-    setImageList(value.fileList)
-  }
-  const [selectValue, setSelectValue] = useState(0)
-
-  return (<div> 
+return (<div> 
     {contextHolder}
     <Card title={
       <Breadcrumb
@@ -64,6 +85,7 @@ const Publish = () => {
         autoComplete="off"
         onFinish={onFinish}
         initialValues={{type:0}}
+        form={form}
       >
         <Form.Item
           label="标题"
