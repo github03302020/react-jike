@@ -1,11 +1,11 @@
 import { Card, Breadcrumb, Form, Input, Select, Button, Radio, Upload, message } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
 import './index.scss'
 import {  useEffect, useState } from 'react'
-import { createArticleAPI, getArticleByIdAPI } from '@/apis/article'
+import { createArticleAPI, getArticleByIdAPI, updateArticleAPI } from '@/apis/article'
 import { useChannel }  from '@/hooks/useChannel'
 import dayjs from 'dayjs'
 import { useForm } from 'antd/es/form/Form'
@@ -14,12 +14,12 @@ import { useForm } from 'antd/es/form/Form'
 const Publish = () => {
   const { channels } = useChannel()
   const options = channels.map(item => ({ label: item.name, value: item.id })) 
-
   
   const [messageApi, contextHolder] = message.useMessage()
+  const navigate = useNavigate()
   
   const onFinish = (value)=>{
-    console.log(value)
+    console.log('finish',value)
     const {title, channel, content, type } = value
     if (imageList.length !== type) return messageApi.warning('封面类型和图片数量不匹配')
       const data = {
@@ -37,7 +37,12 @@ const Publish = () => {
     status:1
   }
   console.log(data)
-  createArticleAPI(data)
+  if(id){
+    updateArticleAPI({...data, id})
+  }else{
+     createArticleAPI(data)
+  }
+  navigate('/article')
 }
 
 const [imageList, setImageList]=useState([])
@@ -50,8 +55,6 @@ const [selectValue, setSelectValue] = useState(0)
 const [ searchParams] = useSearchParams()
 const [ form ] = useForm()
 const id =searchParams.get('id')
-const [fileList, setFileList] = useState()
-  // const [imageUrl, setImageUrl] = useState()
 
 
 useEffect(()=>{
@@ -66,8 +69,7 @@ useEffect(()=>{
         // cover: res.data.cover.images
       })
       setSelectValue(cover.type)
-      setFileList(cover.images.map(url => { return { url } }))
-      // setImageUrl(res.data.cover.images)
+      setImageList(cover.images.map(thumbUrl => { return { thumbUrl } }))
 
     }
   if (id) {
@@ -143,14 +145,14 @@ return (<div>
               // action="http://localhost:3004/upload"
               onChange={handleChange}
               beforeUpload={()=>false}
-              fileList={fileList}
+              fileList={imageList}
             >
               <div>
             {/* {imageUrl ? (
               <img draggable={false} src={imageUrl} alt="pic" style={{ width: '100%' }} />
             ) : */}
                 <PlusOutlined />
-                {/* } */}
+            {/* }  */}
               </div>
             </Upload>
         </Form.Item>}

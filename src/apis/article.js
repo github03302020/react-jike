@@ -36,3 +36,11 @@ export function getArticleByIdAPI(id){
     url: `/articles/${id}`
   })
 }
+
+export function updateArticleAPI(data){
+  return request({
+    method: "PUT",
+    url: `/articles/${data.id}`,
+    data
+  })
+}
