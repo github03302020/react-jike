@@ -55,7 +55,6 @@ const [fileList, setFileList] = useState()
 
 
 useEffect(()=>{
-  if(id){
     const getArticle=async()=>{
       const res = await getArticleByIdAPI(id)
       const data = res.data
@@ -71,6 +70,7 @@ useEffect(()=>{
       // setImageUrl(res.data.cover.images)
 
     }
+  if (id) {
     getArticle()
   }
 },[form,id])
@@ -84,7 +84,7 @@ return (<div>
             title: (<Link to = '/'>首页</Link>),
           },
           {
-            title: '文章发布',
+            title: `文章${id? '编辑':'发布'}`,
           }
         ]}
       />
